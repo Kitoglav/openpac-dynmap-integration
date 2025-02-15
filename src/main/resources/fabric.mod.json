@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "openpac-dynmap-integration",
+  "version": "${version}",
+  "name": "OpenPAC-DynMap-Integration",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Kitoglav"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/openpac-dynmap-integration/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.kitoglav.openpacdynmap.OpenPACDynMapIntegration"
+    ],
+    "client": [
+      "com.kitoglav.openpacdynmap.OpenPACDynMapIntegrationClient"
+    ]
+  },
+  "mixins": [
+    "openpac-dynmap-integration.mixins.json",
+    {
+      "config": "openpac-dynmap-integration.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*",
+    "dynmap": "3.7-SNAPSHOT",
+    "openpartiesandclaims": "0.23.7"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
