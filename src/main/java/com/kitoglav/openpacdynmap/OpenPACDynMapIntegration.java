@@ -30,28 +30,23 @@ public class OpenPACDynMapIntegration extends DynmapCommonAPIListener implements
     private volatile ThreadPoolExecutor executor;
     private volatile MarkerSet claimMarkerSet;
 
-    public static void error(Throwable e) {
-        LOGGER.error("Error occurred!", e);
-    }
-
     @Override
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTED.register(this::serverStarted);
         ServerLifecycleEvents.SERVER_STOPPED.register(this::serverStopped);
     }
-
     private void serverStarted(MinecraftServer server) {
-        LOGGER.info("{} status: STARTING...", MOD_ID);
+        info("{} status: STARTING...", MOD_ID);
         this.server = server;
         DynmapCommonAPIListener.register(this);
-        LOGGER.info("{} status: STARTED", MOD_ID);
+        info("{} status: STARTED", MOD_ID);
     }
 
     private void serverStopped(MinecraftServer server) {
-        LOGGER.info("{} status: STOPPING...", MOD_ID);
+        info("{} status: STOPPING...", MOD_ID);
         this.server = null;
         DynmapCommonAPIListener.unregister(this);
-        LOGGER.info("{} status: STOPPED", MOD_ID);
+        info("{} status: STOPPED", MOD_ID);
 
     }
 
@@ -93,9 +88,9 @@ public class OpenPACDynMapIntegration extends DynmapCommonAPIListener implements
             set.deleteMarkerSet();
         }
         this.claimMarkerSet = dynmapCommonAPI.getMarkerAPI().createMarkerSet(OpenPACDynMapIntegration.MOD_ID + ":claim", "Claims", null, false);
-        LOGGER.info("{} connected to DynMap API!", MOD_ID);
+        info("{} connected to DynMap API!", MOD_ID);
         this.openPacApi = OpenPACServerAPI.get(server);
-        LOGGER.info("{} connected to OpenPartiesAndClaims API!", MOD_ID);
+        info("{} connected to OpenPartiesAndClaims API!", MOD_ID);
         this.scheduler = new Scheduler(SchedulerConfig.builder().maxThreads(1).minThreads(1).threadFactory(() -> new ThreadFactoryBuilder().setNameFormat(MOD_ID + "-scheduler-thread-%d").build()).build());
         this.executor = new ThreadPoolExecutor(1, Runtime.getRuntime().availableProcessors() * 8, 500L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), new ThreadFactoryBuilder().setNameFormat(MOD_ID + "-executor-thread-%d").build());
         this.scheduler.schedule(new UpdateClaimsTask(this), Schedules.afterInitialDelay(Schedules.fixedFrequencySchedule(Duration.ofSeconds(60)), Duration.ofSeconds(2)));
@@ -105,13 +100,26 @@ public class OpenPACDynMapIntegration extends DynmapCommonAPIListener implements
     public void apiDisabled(DynmapCommonAPI api) {
         this.dynmapApi = null;
         this.claimMarkerSet = null;
-        LOGGER.info("{} disconnected from DynMap API", MOD_ID);
+        info("{} disconnected from DynMap API", MOD_ID);
         this.openPacApi = null;
-        LOGGER.info("{} disconnected from OpenPartiesAndClaims API", MOD_ID);
+        info("{} disconnected from OpenPartiesAndClaims API", MOD_ID);
         this.scheduler.gracefullyShutdown();
         this.executor.shutdownNow();
-        LOGGER.info("{} shouted down executors", MOD_ID);
+        info("{} shouted down executors", MOD_ID);
 
 
+    }
+
+    public static void error(Throwable e, Object... args) {
+        error("Error occurred!", e, args);
+    }
+    public static void error(String message, Throwable e, Object... args) {
+        LOGGER.error(message, e, args);
+    }
+    public static void info(String message, Object... args) {
+        LOGGER.info(message, args);
+    }
+    public static void warn(String message, Object... args) {
+        LOGGER.warn(message, args);
     }
 }

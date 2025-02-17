@@ -35,11 +35,11 @@ public class UpdateClaimsTask extends IModTask {
             loadingFuture.get(30, TimeUnit.SECONDS);
             processQueue();
         } catch (TimeoutException e) {
-            OpenPACDynMapIntegration.LOGGER.error("Timeout loading player claims", e);
+            OpenPACDynMapIntegration.error("Timeout loading player claims", e);
         } catch (InterruptedException e) {
-            OpenPACDynMapIntegration.LOGGER.warn("Processing interrupted", e);
+            OpenPACDynMapIntegration.warn("Processing interrupted", e);
         } catch (ExecutionException e) {
-            OpenPACDynMapIntegration.LOGGER.error("Error loading player claims", e.getCause());
+            OpenPACDynMapIntegration.error("Error loading player claims", e.getCause());
         } finally {
             resetState();
         }
@@ -76,10 +76,10 @@ public class UpdateClaimsTask extends IModTask {
     private void safeAddToQueue(IServerPlayerClaimInfoAPI player) {
         try {
             if (!playersToDo.offer(player, 1, TimeUnit.SECONDS)) {
-                OpenPACDynMapIntegration.LOGGER.warn("Queue is full, skipping player {}", player);
+                OpenPACDynMapIntegration.warn("Queue is full, skipping player {}", player);
             }
         } catch (InterruptedException e) {
-            OpenPACDynMapIntegration.LOGGER.warn("Processing interrupted", e);
+            OpenPACDynMapIntegration.warn("Processing interrupted", e);
         }
     }
 
