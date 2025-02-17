@@ -166,9 +166,6 @@ public class UpdateClaimsTask extends IModTask {
                     m.setFillStyle(0, 0);
                     m.setLineStyle(2, 1F, color);
                 }
-                m.setFillStyle(0.35F, color);
-                m.setLineStyle(2, 1F, color);
-
             }
         }
     }

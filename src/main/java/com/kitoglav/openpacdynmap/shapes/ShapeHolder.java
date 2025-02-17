@@ -12,22 +12,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ShapeHolder {
-    private final Shape baseShape;
-    private final Shape[] holes;
-
-    public ShapeHolder(Shape baseShape, Shape[] holes) {
-        this.baseShape = baseShape;
-        this.holes = holes;
-    }
-
-    public Shape baseShape() {
-        return baseShape;
-    }
-
-    public Shape[] holes() {
-        return holes;
-    }
+public record ShapeHolder(Shape baseShape, Shape[] holes) {
 
     public static ShapeHolder create(Set<ChunkPos> chunks) {
         return new ShapeHolder(
